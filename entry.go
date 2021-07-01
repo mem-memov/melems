@@ -10,7 +10,7 @@ type Entry struct {
 }
 
 func newEntry(elements []uint) *Entry {
-	return &Entry {
+	return &Entry{
 		elements: elements,
 		maxIndex: uint(len(elements)) - 1,
 	}

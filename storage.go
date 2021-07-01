@@ -6,7 +6,7 @@ import (
 
 type Storage struct {
 	entryLength uint
-	book *mbook.Book
+	book        *mbook.Book
 }
 
 func NewStorage(entryLength uint, increment uint) (*Storage, error) {
@@ -17,7 +17,7 @@ func NewStorage(entryLength uint, increment uint) (*Storage, error) {
 
 	s := &Storage{
 		entryLength: entryLength,
-		book: book,
+		book:        book,
 	}
 
 	return s, nil
@@ -29,6 +29,25 @@ func (s *Storage) Create() *Entry {
 }
 
 func (s *Storage) Read(position uint, entry *Entry) error {
+	for i := uint(0); i < s.entryLength; i++ {
+		value := s.book.Read(position + i)
+		err := entry.Set(i, value)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
-	//entry.read(position, )
+}
+
+func (s *Storage) Write(position uint, entry *Entry) error {
+	for i := uint(0); i < s.entryLength; i++ {
+		value, err := entry.Get(i)
+		if err != nil {
+			return err
+		}
+		s.book.Write(position+i, value)
+	}
+
+	return nil
 }
